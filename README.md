@@ -7,7 +7,9 @@ The image is available directly from https://registry.hub.docker.com/
 
 ## Fork Information
 This is a fork of wurstmeister/kafka.  
-It adds a little extra means of discovering the ZooKeeper connection endpoint, via SRV DNS lookups -- intended to be used with something like HashiCorp's Consul.
+It adds a little extra means of discovering the ZooKeeper connection endpoint, via SRV DNS lookups -- intended to be used with something like HashiCorp's Consul.  
+
+Set the `KAFKA_ZOOKEEPER_SRV` variable to the service name you want to do an SRV look-up on. This should be the service address of your ZooKeeper service. For example: `kafka-zookeeper-node.service.consul` or, if you have `service.consul` in your container's search path, it could simply be: `kafka-zookeeper-node`.
 
 ## Pre-Requisites
 
