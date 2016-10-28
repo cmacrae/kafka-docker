@@ -3,6 +3,8 @@ FROM anapsix/alpine-java
 MAINTAINER Wurstmeister
 
 RUN apk add --update unzip wget curl docker jq coreutils
+RUN curl -L https://github.com/sequenceiq/docker-alpine-dig/releases/download/v9.10.2/dig.tgz\
+| tar -xzv -C /usr/local/bin/
 
 ENV KAFKA_VERSION="0.10.0.1" SCALA_VERSION="2.11"
 ADD download-kafka.sh /tmp/download-kafka.sh
