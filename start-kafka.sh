@@ -1,5 +1,11 @@
 #!/bin/bash
 
+get_zk_srv_addr(){
+    dig @127.0.0.1 +search +noall +answer consul.service.consul SRV \
+	| awk '{printf("%s:%d\n", $8, $7)}'\
+	| sed 's/\.:/:/'
+}
+
 if [[ -z "$KAFKA_PORT" ]]; then
     export KAFKA_PORT=9092
 fi
@@ -13,8 +19,10 @@ fi
 if [[ -z "$KAFKA_LOG_DIRS" ]]; then
     export KAFKA_LOG_DIRS="/kafka/kafka-logs-$HOSTNAME"
 fi
-if [[ -z "$KAFKA_ZOOKEEPER_CONNECT" ]]; then
+if [[ -z "$KAFKA_ZOOKEEPER_CONNECT" && -z "$KAFKA_ZOOKEPER_SRV" ]]; then
     export KAFKA_ZOOKEEPER_CONNECT=$(env | grep ZK.*PORT_2181_TCP= | sed -e 's|.*tcp://||' | paste -sd ,)
+elif [[ -z "$KAFKA_ZOOKEEPER_CONNECT" && ! -z "$KAFKA_ZOOKEPER_SRV" ]]; then
+    export KAFKA_ZOOKEEPER_CONNECT=$(get_zk_srv_addr)
 fi
 
 if [[ -n "$KAFKA_HEAP_OPTS" ]]; then
